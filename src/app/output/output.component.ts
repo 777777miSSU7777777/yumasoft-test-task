@@ -43,4 +43,12 @@ export class OutputComponent implements OnInit {
       default: ;
     }
   }
+
+  exportToFile(): void {
+    const fileBlob = new Blob([this.rawTableData], { type: this.format == 'json' ? 'application/json' : 'text/plain' });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(fileBlob);
+    link.setAttribute('download', `table.${this.format}`);
+    link.click();
+  }
 }
