@@ -21,9 +21,15 @@ export class InputComponent implements OnInit {
               private parser: Papa) { }
 
   ngOnInit() {
+    this.rawTableData = "";
   }
 
   importTable(): void {
+    if (this.rawTableData.length === 0) {
+      this.toastService.show('Table data is empty', { classname: 'bg-danger text-light', delay: 5000 });
+      return;
+    }
+
     try {
       const tableData = JSON.parse(this.rawTableData);
       if (!Array.isArray(tableData)) {
