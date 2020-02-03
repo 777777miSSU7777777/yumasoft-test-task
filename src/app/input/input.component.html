@@ -4,6 +4,16 @@
     </div>
     <textarea [(ngModel)]="rawTableData" class="form-control" id="table-data-input" rows="12"></textarea>
     <div class="row mt-5">
-        <button type="button" class="btn btn-outline-dark mx-auto" (click)="importTable()">Import table</button>
+        <button type="button" class="btn btn-outline-dark mx-auto" (click)="importFromInput()">Import table</button>
+    </div>
+    <div class="row mt-5">
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="table-data-file" accept=".json, .csv" 
+            (change)="handleFileInput($event.target.files)">
+            <label  class="custom-file-label" for="table-data-file">{{ getFileName()}}</label>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <button type="button"  class="btn btn-outline-dark mx-auto" (click)="importFromFile()">Import table from file</button>
     </div>
 </div>
