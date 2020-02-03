@@ -11,8 +11,8 @@ import { Papa } from 'ngx-papaparse';
 })
 
 export class OutputComponent implements OnInit {
-  rawTableData: string;
-  format: string;
+  private _rawTableData: string;
+  private _format: string;
 
   constructor(private router: Router,
               private tableService: TableService, 
@@ -26,33 +26,41 @@ export class OutputComponent implements OnInit {
       return;
     }
 
-    this.format = 'json';
-    this.rawTableData = JSON.stringify(this.tableService.rows)
+    this._format = 'json';
+    this._rawTableData = JSON.stringify(this.tableService.rows)
   }
 
-  backToEditor(): void {
+  get rawTableData(): string {
+    return this._rawTableData;
+  }
+  
+  set rawTableData(value: string) {
+    this._rawTableData = value;
+  }
+
+  public backToEditor(): void {
     this.router.navigate(["/table"]);
   }
 
-  switchFormat(): void {
-    this.format = this.format == 'json' ? 'csv' : 'json';
+  public switchFormat(): void {
+    this._format = this._format == 'json' ? 'csv' : 'json';
 
-    switch(this.format) {
-      case 'json': this.rawTableData = JSON.stringify(this.tableService.rows); break;
-      case 'csv' : this.rawTableData = this.parser.unparse(this.tableService.rows); break;
+    switch(this._format) {
+      case 'json': this._rawTableData = JSON.stringify(this.tableService.rows); break;
+      case 'csv' : this._rawTableData = this.parser.unparse(this.tableService.rows); break;
       default: ;
     }
   }
 
-  exportToFile(): void {
-    const fileBlob = new Blob([this.rawTableData], { type: this.format == 'json' ? 'application/json' : 'text/plain' });
+  public exportToFile(): void {
+    const fileBlob: Blob = new Blob([this._rawTableData], { type: this._format == 'json' ? 'application/json' : 'text/plain' });
     const link = document.createElement("a");
     link.href = window.URL.createObjectURL(fileBlob);
-    link.setAttribute('download', `table.${this.format}`);
+    link.setAttribute('download', `table.${this._format}`);
     link.click();
   }
 
   get switcherText(): string {
-    return `Switch to ${this.format === 'json' ? 'CSV' : 'JSON'}`
+    return `Switch to ${this._format === 'json' ? 'CSV' : 'JSON'}`
   }
 }
