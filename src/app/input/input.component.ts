@@ -13,8 +13,8 @@ import isEmpty from 'lodash-es/isEmpty';
 })
 
 export class InputComponent implements OnInit {
-  rawTableData: string;
-  file: File;
+  private _rawTableData: string;
+  private _file: File;
 
   constructor(private router: Router, 
               private toastService: ToastService,
@@ -22,11 +22,19 @@ export class InputComponent implements OnInit {
               private parser: Papa) { }
 
   ngOnInit() {
-    this.rawTableData = "";
-    this.file = null;
+    this._rawTableData = "";
+    this._file = null;
   }
 
-  importTable(rawTableData: string): void {
+  get rawTableData(): string {
+    return this._rawTableData;
+  }
+
+  set rawTableData(value: string) {
+    this._rawTableData = value;
+  }
+
+  private importTable(rawTableData: string): void {
     if (rawTableData.length === 0) {
       this.toastService.show('Table data is empty', { classname: 'bg-danger text-light', delay: 5000 });
       return;
@@ -34,9 +42,12 @@ export class InputComponent implements OnInit {
 
     try {
       const tableData = JSON.parse(rawTableData);
-      
+
       if (!Array.isArray(tableData)) {
         this.toastService.show('JSON table data is not array', { classname: 'bg-danger text-light', delay: 5000 });
+        return;
+      } else if (tableData.length === 0) {
+        this.toastService.show('JSON table data is empty', { classname: 'bg-danger text-light', delay: 5000 });
         return;
       }
 
@@ -57,21 +68,24 @@ export class InputComponent implements OnInit {
     }
   }
 
-  handleFileInput(files: FileList): void {
-    this.file = files.item(0);
+  public handleFileInput(files: FileList): void {
+    this._file = files.item(0);
   }
 
-  readFile(): Promise<string> {
-    return new Response(this.file).text();
+  private readFile(): Promise<string> {
+    return new Response(this._file).text();
   }
 
-  importFromInput(): void {
-    this.importTable(this.rawTableData);
+  public importFromInput(): void {
+    this.importTable(this._rawTableData);
   }
 
-  async importFromFile(): Promise<void> {
-    if (!this.file) {
+  public async importFromFile(): Promise<void> {
+    if (!this._file) {
       this.toastService.show('There is no file', { classname: 'bg-danger text-light', delay: 5000 });
+      return;
+    } else if (!['application/json', 'application/vnd.ms-excel'].includes(this._file.type)) {
+      this.toastService.show('Invalid file extension', { classname: 'bg-danger text-light', delay: 5000 });
       return;
     }
 
@@ -79,7 +93,7 @@ export class InputComponent implements OnInit {
     this.importTable(fileTableData);
   }
 
-  getFileName(): string {
-    return this.file && this.file.name || 'Choose file';
+  get fileName(): string {
+    return this._file && this._file.name || 'Choose file';
   }
 }
