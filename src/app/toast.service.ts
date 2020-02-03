@@ -5,13 +5,14 @@ import { Injectable } from '@angular/core';
 })
 
 export class ToastService {
-  toasts: any[] = [];
+  private toasts: any[] = [];
 
-  show(text: string, options: any = {}): void {
+  public show(text: string, options: any = {}): void {
+    console.log('123');
     this.toasts.push({ text, ...options });
   }
 
-  remove(toast): void {
+  public remove(toast: any): void {
     this.toasts = this.toasts.filter(t => t !== toast);
   }
 }

@@ -8,7 +8,7 @@ export class UtilService {
 
   constructor() { }
 
-  copyArray(src: any[]): any[] {
+  public copyArray(src: any[]): any[] {
     return JSON.parse(JSON.stringify(src));
   }
 }
