@@ -7,8 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { ToastsContainerComponent } from './toasts-container/toasts-container.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TableEditorComponent } from './table-editor/table-editor.component';
-import { RouterModule } from '@angular/router';
 import { OutputComponent } from './output/output.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -22,14 +22,10 @@ import { OutputComponent } from './output/output.component';
     BrowserModule,
     NgbModule,
     FormsModule,
-    RouterModule.forRoot([
-      { path: 'input', component: InputComponent },
-      { path: 'table', component: TableEditorComponent },
-      { path: 'output', component: OutputComponent },
-      { path: '', redirectTo: '/input', pathMatch: 'full' }
-    ])
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

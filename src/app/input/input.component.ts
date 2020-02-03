@@ -12,7 +12,9 @@ import { Router } from '@angular/router';
 export class InputComponent implements OnInit {
   rawTableData: string;
 
-  constructor(private router: Router, public toastService: ToastService, public tableService: TableService) { }
+  constructor(private router: Router, 
+              private toastService: ToastService,
+              private tableService: TableService) { }
 
   ngOnInit() {
   }
