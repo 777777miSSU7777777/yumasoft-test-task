@@ -11,9 +11,9 @@ import { ToastService } from '../toast.service';
 })
 
 export class TableEditorComponent implements OnInit {
-  rows: any[];
-  keys: string[];
-  mode: string;
+  private _rows: any[];
+  private _keys: string[];
+  private _mode: string;
 
   constructor(private router: Router,
               private tableService: TableService, 
@@ -26,60 +26,81 @@ export class TableEditorComponent implements OnInit {
       this.router.navigate(["/input"]);
       return;
     }
-    this.rows =  this.utilService.copyArray(this.tableService.rows);
+
+    this._rows =  this.utilService.copyArray(this.tableService.rows);
     this.parseKeys();
-    this.mode = 'readonly';
+    this._mode = 'r/o';
   }
 
-  getColsNames(): string[] {
-    return this.keys;
+  get rows(): any[] {
+    return this._rows;
   }
 
-  parseKeys(): void {
+  set rows(value: any[]) {
+    this._rows = value;
+  }
+
+  get keys(): string[] {
+    return this._keys;
+  }
+
+  get mode(): string {
+    return this._mode;
+  }
+
+  private parseKeys(): void {
     const keys: Set<string> = new Set<string>();
+
     for (let row of this.rows) {
       for (let key of Object.keys(row)) {
         keys.add(key);
       }
     }
 
-    this.keys = [];
+    this._keys = [];
+
     for(let key of keys) {
-      this.keys.push(key);
+      this._keys.push(key);
     }
   }
 
-  toggleMode(): void {
-    this.mode = this.mode === 'readonly' ? 'edit' : 'readonly';
+  public editMode(): void {
+    this._mode = 'edit';
   }
 
-  exportTable(): void {
-    this.router.navigate(["/output"]);
+  private roMode(): void {
+    this._mode = 'r/o';
   }
 
-  saveChanges(): void {
+  public exportTable(): void {
+    this.router.navigate(['/output']);
+  }
+
+  public saveChanges(): void {
     this.tableService.rows = this.utilService.copyArray(this.rows);
-    this.toggleMode();
+    this.roMode();
   }
 
-  cancelChanges(): void {
+  public cancelChanges(): void {
     this.rows = this.utilService.copyArray(this.tableService.rows);
-    this.toggleMode();
+    this.roMode();
   }
 
-  backToInput(): void {
-    this.router.navigate(["/input"]);
+  public backToInput(): void {
+    this.router.navigate(['/input']);
   }
 
-  deleteRow(row: any): void {
-    this.rows = this.rows.filter(r => r !== row);
+  public deleteRow(row: any): void {
+    this._rows = this._rows.filter(r => r !== row);
   }
 
-  createNewRow(): void {
+  public createNewRow(): void {
     const newRow = {};
+
     for (let prop of this.keys) {
       newRow[prop] = "";
     }
-    this.rows.push(newRow);
+
+    this._rows.push(newRow);
   }
 }
