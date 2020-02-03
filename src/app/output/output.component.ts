@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TableService } from '../table.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../toast.service';
+import { Papa } from 'ngx-papaparse';
 
 @Component({
   selector: 'app-output',
@@ -11,10 +12,12 @@ import { ToastService } from '../toast.service';
 
 export class OutputComponent implements OnInit {
   rawTableData: string;
+  format: string;
 
   constructor(private router: Router,
               private tableService: TableService, 
-              private toastService: ToastService) { }
+              private toastService: ToastService,
+              private parser: Papa) { }
 
   ngOnInit() {
     if (!this.tableService.rows) {
@@ -22,10 +25,22 @@ export class OutputComponent implements OnInit {
       this.router.navigate(["/input"]);
       return;
     }
+
+    this.format = 'json';
     this.rawTableData = JSON.stringify(this.tableService.rows)
   }
 
   backToEditor(): void {
     this.router.navigate(["/table"]);
+  }
+
+  switchFormat(): void {
+    this.format = this.format == 'json' ? 'csv' : 'json';
+
+    switch(this.format) {
+      case 'json': this.rawTableData = JSON.stringify(this.tableService.rows); break;
+      case 'csv' : this.rawTableData = this.parser.unparse(this.tableService.rows); break;
+      default: ;
+    }
   }
 }

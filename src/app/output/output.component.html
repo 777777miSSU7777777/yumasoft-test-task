@@ -3,7 +3,14 @@
         <label for="data-table-input" class="mb-4 mx-auto display-4">Table data</label>
     </div>
     <textarea [(ngModel)]="rawTableData" class="form-control" id="table-data-input" rows="12"></textarea>
-    <div class="row">
-        <button type="button" class="btn btn-outline-dark mt-5 mx-auto" (click)="backToEditor()">Back</button>
+    <div class="row mx-auto mt-5 w-60">
+        <button type="button" class="btn btn-outline-dark col mr-5" (click)="backToEditor()">Back</button>
+        <button type="button" class="btn btn-outline-dark col mx-5" (click)="switchFormat()">
+            <ng-template *ngIf="format === 'json'; then json; else csv">
+            </ng-template>
+            <ng-template #json>Switch to CSV</ng-template>
+            <ng-template #csv>Switch to JSON</ng-template>
+        </button>
+        <button type="button" class="btn btn-outline-dark col ml-5">Export to file</button>
     </div>
 </div>
