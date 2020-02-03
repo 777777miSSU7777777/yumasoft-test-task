@@ -1,0 +1,54 @@
+<div class="container">
+    <table class="table mx-auto mt-5 w-80">
+        <thead>
+            <tr>
+                <th scope="col" *ngFor="let prop of getColsNames()">{{ prop }}</th>
+                <th class="delete-row-th"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-template *ngIf="mode === 'readonly'; then readonlytab; else edittab"></ng-template>
+    
+            <ng-template #readonlytab>
+                <tr *ngFor="let row of rows">
+                    <td *ngFor="let prop of getColsNames()">
+                        <input disabled [(ngModel)]="row[prop]" type="text" class="form-control">
+                    </td>
+                    <td class="delete-row-entry">
+                    </td>
+                </tr>
+            </ng-template>
+            
+            <ng-template #edittab>
+                <tr *ngFor="let row of rows">
+                    <td *ngFor="let prop of getColsNames()">
+                        <input [(ngModel)]="row[prop]" type="text" class="form-control">
+                    </td>
+                    <td (click)="deleteRow(row)" class="delete-row-btn">
+                        <img src="bootstrap-icons/x.svg">
+                    </td>
+                </tr>
+            </ng-template>
+    
+        </tbody>
+    </table>
+
+    <div class="row mx-auto mt-5 w-60">
+        <ng-template *ngIf="mode === 'readonly'; then readonlycontrols; else editcontrols"></ng-template>
+
+        <ng-template #editcontrols>
+            <button type="button" class="btn btn-outline-primary col mr-5" (click)="createNewRow()">New Row</button>
+            <button type="button" class="btn btn-outline-danger col mx-5" (click)="cancelChanges()">Cancel Changes</button>
+            <button type="button" class="btn btn-outline-success col ml-5" (click)="saveChanges()">Save changes</button>
+        </ng-template>
+
+        <ng-template #readonlycontrols>
+            <button type="button" class="btn btn-outline-dark col mr-5" (click)="backToInput()">Back</button>
+            <button type="button" class="btn btn-outline-dark col mx-5" (click)="toggleMode()">Edit</button>
+            <button type="button" class="btn btn-outline-dark col ml-5" (click)="exportTable()">Export table</button>
+        </ng-template>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,9 @@
+<div class="group-form w-75 mx-auto my-5">
+    <div class="row">
+        <label for="data-table-input" class="mb-4 mx-auto display-4">Table data</label>
+    </div>
+    <textarea [(ngModel)]="rawTableData" class="form-control" id="table-data-input" rows="12"></textarea>
+    <div class="row">
+        <button type="button" class="btn btn-outline-dark mt-5 mx-auto" (click)="loadTable()">Load table</button>
+    </div>
+</div>
