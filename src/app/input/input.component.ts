@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ToastService } from '../toast.service';
 import { TableService } from '../table.service';
 import { Router } from '@angular/router';
+import { Papa } from 'ngx-papaparse';
+import isEmpty from 'lodash-es/isEmpty';
+
 
 @Component({
   selector: 'app-input',
@@ -14,12 +17,13 @@ export class InputComponent implements OnInit {
 
   constructor(private router: Router, 
               private toastService: ToastService,
-              private tableService: TableService) { }
+              private tableService: TableService,
+              private parser: Papa) { }
 
   ngOnInit() {
   }
 
-  loadTable(): void {
+  importTable(): void {
     try {
       const tableData = JSON.parse(this.rawTableData);
       if (!Array.isArray(tableData)) {
@@ -29,8 +33,17 @@ export class InputComponent implements OnInit {
       this.tableService.rows = tableData;
       this.router.navigate(['/table']);
     } catch (error) {
-      console.error(error);
-      this.toastService.show('JSON table data is incorrect', { classname: 'bg-danger text-light', delay: 5000 });
+        this.parser.parse(this.rawTableData, {
+          header: true,
+          complete: (result) => {
+            if (isEmpty(result.errors)) {
+              this.tableService.rows = result.data;
+              this.router.navigate(['/table']);
+            } else {
+              this.toastService.show('Table data is incorrect', { classname: 'bg-danger text-light', delay: 5000 });
+            }
+          }
+        });
     }
   }
 }
