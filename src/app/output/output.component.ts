@@ -51,4 +51,8 @@ export class OutputComponent implements OnInit {
     link.setAttribute('download', `table.${this.format}`);
     link.click();
   }
+
+  get switcherText(): string {
+    return `Switch to ${this.format === 'json' ? 'CSV' : 'JSON'}`
+  }
 }
