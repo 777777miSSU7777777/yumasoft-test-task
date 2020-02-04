@@ -9,6 +9,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TableEditorComponent } from './table-editor/table-editor.component';
 import { OutputComponent } from './output/output.component';
 import { AppRoutingModule } from './app-routing.module';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     NgbModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

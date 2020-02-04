@@ -3,6 +3,7 @@ import { TableService } from '../table.service';
 import { Router } from '@angular/router';
 import { UtilService } from '../util.service';
 import { ToastService } from '../toast.service';
+import { CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-table-editor',
@@ -104,5 +105,9 @@ export class TableEditorComponent implements OnInit {
     }
 
     this._rows.push(newRow);
+  }
+
+  public drop(event: CdkDragDrop<any[]>): void {
+    moveItemInArray(this._rows, event.previousIndex, event.currentIndex);
   }
 }

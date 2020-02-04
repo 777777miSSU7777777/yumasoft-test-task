@@ -1,9 +1,16 @@
-th.delete-row-th {
+th.delete-row-header {
     width: 40px;
     height: 40px;
+    padding-left: 0;
 }
 
-td.delete-row-entry {
+th.drag-row-header {
+    width: 52px;
+    height: 40px;
+    padding-right: 0;
+}
+
+td.empty-cell {
     width: 40px;
     height: 40px;
 }
@@ -11,10 +18,20 @@ td.delete-row-entry {
 td.delete-row-btn {
     max-width: 40px;
     max-height: 40px;
-    padding-left: 0 !important;
+    padding-left: 0;
 }
 
-td.delete-row-btn > img {
+td.drag-row-element {
+    max-width: 40px;
+    max-height: 40px;
+    padding-right: 0 ;
+}
+
+td.drag-row-element > img:hover {
+    cursor: move;
+}
+
+td.delete-row-btn > img, td.drag-row-element > img {
     width: 38px;
     height: 38px;
 }
@@ -23,9 +40,37 @@ td.delete-row-btn > img {
     background-color: #292b2c;
     color: white;
 }
+
 .dark-modal .close {
     color: white;
 }
+
 .light-blue-backdrop {
     background-color: #5cb3fd;
+}
+
+.cdk-drag-preview {
+    padding-top: 12px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-preview > td {
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+  
+.cdk-drag-animating {
+    transition: transform 100ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.table.cdk-drop-list-dragging .table:not(.cdk-drag-placeholder) {
+    transition: transform 100ms cubic-bezier(0, 0, 0.2, 1);
 }

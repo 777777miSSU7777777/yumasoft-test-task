@@ -1,26 +1,32 @@
 <div class="container">
-    <table class="table mx-auto mt-5 w-80">
+    <table class="table mx-auto mt-5 w-100">
         <thead>
             <tr>
+                <th class="drag-row-header"></th>
                 <th scope="col" *ngFor="let key of keys">{{ key }}</th>
-                <th class="delete-row-th"></th>
+                <th class="delete-row-header"></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody cdkDropList (cdkDropListDropped)="drop($event)">
             <ng-template *ngIf="mode === 'r/o'; then rotab; else edittab"></ng-template>
     
             <ng-template #rotab>
                 <tr *ngFor="let row of rows">
+                    <td class="empty-cell">
+                    </td>
                     <td *ngFor="let key of keys">
                         <input disabled [(ngModel)]="row[key]" type="text" class="form-control">
                     </td>
-                    <td class="delete-row-entry">
+                    <td class="empty-cell">
                     </td>
                 </tr>
             </ng-template>
             
             <ng-template #edittab>
-                <tr *ngFor="let row of rows">
+                <tr *ngFor="let row of rows" cdkDragBoundary="tbody" cdkDrag>
+                    <td class="drag-row-element">
+                        <img src="bootstrap-icons/list.svg" cdkDragHandle>
+                    </td>
                     <td *ngFor="let key of keys">
                         <input [(ngModel)]="row[key]" type="text" class="form-control">
                     </td>
