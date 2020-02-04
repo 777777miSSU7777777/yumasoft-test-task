@@ -16,6 +16,14 @@ export class InputComponent implements OnInit {
   private _rawTableData: string;
   private _file: File;
 
+  private readonly EMPTY_ERROR: string = 'Table data is empty';
+  private readonly NOT_JSON_ARRAY_ERROR: string = 'JSON table data is not array';
+  private readonly JSON_EMPTY_ARRAY_ERROR: string = 'JSON table data is empty';
+  private readonly CSV_EMPTY_ARRAY_ERROR: string = 'CSV table data is empty';
+  private readonly INCORRECT_TABLE_DATA_ERROR: string = 'Table data is incorrect';
+  private readonly NO_FILE_ERROR: string = 'There is no file';
+  private readonly INVALID_FILE_EXTENSION_ERROR: string = 'Invalid file extension';
+
   constructor(private router: Router, 
               private toastService: ToastService,
               private tableService: TableService,
@@ -34,9 +42,13 @@ export class InputComponent implements OnInit {
     this._rawTableData = value;
   }
 
+  private toTable(): void {
+    this.router.navigate(['/table']);
+  }
+
   private importTable(rawTableData: string): void {
     if (rawTableData.length === 0) {
-      this.toastService.show('Table data is empty', { classname: 'bg-danger text-light', delay: 5000 });
+      this.toastService.showError(this.EMPTY_ERROR, 5);
       return;
     }
 
@@ -44,24 +56,27 @@ export class InputComponent implements OnInit {
       const tableData = JSON.parse(rawTableData);
 
       if (!Array.isArray(tableData)) {
-        this.toastService.show('JSON table data is not array', { classname: 'bg-danger text-light', delay: 5000 });
+        this.toastService.showError(this.NOT_JSON_ARRAY_ERROR, 5);
         return;
       } else if (tableData.length === 0) {
-        this.toastService.show('JSON table data is empty', { classname: 'bg-danger text-light', delay: 5000 });
+        this.toastService.showError(this.JSON_EMPTY_ARRAY_ERROR, 5);
         return;
       }
 
       this.tableService.rows = tableData;
-      this.router.navigate(['/table']);
+      this.toTable();
     } catch (error) {
         this.parser.parse(rawTableData, {
           header: true,
           complete: (result) => {
-            if (isEmpty(result.errors)) {
+            if (result.data.length === 0) {
+              this.toastService.showError(this.CSV_EMPTY_ARRAY_ERROR, 5);
+              return;
+            } else if (isEmpty(result.errors)) {
               this.tableService.rows = result.data;
-              this.router.navigate(['/table']);
+              this.toTable();
             } else {
-              this.toastService.show('Table data is incorrect', { classname: 'bg-danger text-light', delay: 5000 });
+              this.toastService.showError(this.INCORRECT_TABLE_DATA_ERROR, 5);
             }
           }
         });
@@ -82,10 +97,10 @@ export class InputComponent implements OnInit {
 
   public async importFromFile(): Promise<void> {
     if (!this._file) {
-      this.toastService.show('There is no file', { classname: 'bg-danger text-light', delay: 5000 });
+      this.toastService.showError(this.NO_FILE_ERROR, 5);
       return;
     } else if (!['application/json', 'application/vnd.ms-excel'].includes(this._file.type)) {
-      this.toastService.show('Invalid file extension', { classname: 'bg-danger text-light', delay: 5000 });
+      this.toastService.showError(this.INVALID_FILE_EXTENSION_ERROR, 5);
       return;
     }
 

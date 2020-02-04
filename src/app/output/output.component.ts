@@ -14,6 +14,8 @@ export class OutputComponent implements OnInit {
   private _rawTableData: string;
   private _format: string;
 
+  private readonly EMPTY_DATA_TABLE_ERROR: string = 'You should import table data first!';
+
   constructor(private router: Router,
               private tableService: TableService, 
               private toastService: ToastService,
@@ -21,8 +23,8 @@ export class OutputComponent implements OnInit {
 
   ngOnInit() {
     if (!this.tableService.rows) {
-      this.toastService.show('You should load table data first!', { classname: 'bg-danger text-light', delay: 5000 });
-      this.router.navigate(["/input"]);
+      this.toastService.showError(this.EMPTY_DATA_TABLE_ERROR, 5);
+      this.backToInput();
       return;
     }
 
@@ -36,6 +38,10 @@ export class OutputComponent implements OnInit {
   
   set rawTableData(value: string) {
     this._rawTableData = value;
+  }
+
+  private backToInput(): void {
+    this.router.navigate(['/input']);
   }
 
   public backToEditor(): void {

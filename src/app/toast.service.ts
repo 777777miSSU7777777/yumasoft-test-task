@@ -7,9 +7,12 @@ import { Injectable } from '@angular/core';
 export class ToastService {
   private toasts: any[] = [];
 
-  public show(text: string, options: any = {}): void {
-    console.log('123');
+  private show(text: string, options: any = {}): void {
     this.toasts.push({ text, ...options });
+  }
+
+  public showError(text: string, duration: number) {
+    this.show(text, { classname: 'bg-danger text-light', delay: 1000 * duration })
   }
 
   public remove(toast: any): void {

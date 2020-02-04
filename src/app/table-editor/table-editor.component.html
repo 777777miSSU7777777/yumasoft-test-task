@@ -7,9 +7,9 @@
             </tr>
         </thead>
         <tbody>
-            <ng-template *ngIf="mode === 'readonly'; then readonlytab; else edittab"></ng-template>
+            <ng-template *ngIf="mode === 'r/o'; then rotab; else edittab"></ng-template>
     
-            <ng-template #readonlytab>
+            <ng-template #rotab>
                 <tr *ngFor="let row of rows">
                     <td *ngFor="let key of keys">
                         <input disabled [(ngModel)]="row[key]" type="text" class="form-control">
