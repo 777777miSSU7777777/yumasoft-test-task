@@ -4,6 +4,7 @@ import { TableService } from '../table.service';
 import { Router } from '@angular/router';
 import { Papa } from 'ngx-papaparse';
 import isEmpty from 'lodash-es/isEmpty';
+import { UtilService } from '../util.service';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class InputComponent implements OnInit {
   constructor(private router: Router, 
               private toastService: ToastService,
               private tableService: TableService,
+              private utilService: UtilService,
               private parser: Papa) { }
 
   ngOnInit() {
@@ -52,8 +54,10 @@ export class InputComponent implements OnInit {
       return;
     }
 
+    let tableData: any[];
+
     try {
-      const tableData = JSON.parse(rawTableData);
+      tableData = JSON.parse(rawTableData);
 
       if (!Array.isArray(tableData)) {
         this.toastService.showError(this.NOT_JSON_ARRAY_ERROR, 5);
@@ -65,7 +69,21 @@ export class InputComponent implements OnInit {
 
       this.tableService.rows = tableData;
       this.toTable();
-    } catch (error) {
+    } catch {
+      try {
+        tableData = this.utilService.parseCustomJSON(rawTableData);
+
+        if (!Array.isArray(tableData)) {
+          this.toastService.showError(this.NOT_JSON_ARRAY_ERROR, 5);
+          return;
+        } else if (tableData.length === 0) {
+          this.toastService.showError(this.JSON_EMPTY_ARRAY_ERROR, 5);
+          return;
+        }
+  
+        this.tableService.rows = tableData;
+        this.toTable();
+      } catch {
         this.parser.parse(rawTableData, {
           header: true,
           complete: (result) => {
@@ -80,6 +98,7 @@ export class InputComponent implements OnInit {
             }
           }
         });
+      }
     }
   }
 
