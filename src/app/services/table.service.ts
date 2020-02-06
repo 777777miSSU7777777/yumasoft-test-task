@@ -66,8 +66,8 @@ export class TableService {
     }
   }
 
-  private tryParse(parseCallback: Function, str: string): void {
-    const tableRows = parseCallback(str);
+  private tryParse(parse: Function, str: string): void {
+    const tableRows = parse(str);
     const tableKeys = this.utilService.parseKeys(tableRows);
     this.utilService.stringifyRowsFields(tableRows, tableKeys);
     this._rows = tableRows;
