@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import matchAll from 'string.prototype.matchall';
 import { ToastService } from './toast.service';
-import { Papa } from 'ngx-papaparse';
+import { Papa, ParseResult } from 'ngx-papaparse';
 import isEmpty from 'lodash-es/isEmpty';
 
 @Injectable({
@@ -62,22 +62,17 @@ export class UtilService {
   }
 
   public parseCSV(str: string): any[] {
-    this.csvParser.parse(str, {
-      header: true,
-      complete: (result) => {
-        if (result.data.length === 0) {
-          this.toastService.showError(this.CSV_EMPTY_ARRAY_ERROR, 5);
-          throw new Error("CSV array is empty error");
-        } else if (isEmpty(result.errors)) {
-          return (result.data as any[]);
-        } else {
-          this.toastService.showError(this.INCORRECT_TABLE_DATA_ERROR, 5);
-          throw new Error("Table data is incorrect error");
-        }
-      }
-    });
-
-    return null;
+    const result: ParseResult = this.csvParser.parse(str, { header: true });
+    
+    if (result.data.length === 0) {
+      this.toastService.showError(this.CSV_EMPTY_ARRAY_ERROR, 5);
+      throw new Error("CSV array is empty error");
+    } else if (isEmpty(result.errors)) {
+      return (result.data as any[]);
+    } else {
+      this.toastService.showError(this.INCORRECT_TABLE_DATA_ERROR, 5);
+      throw new Error("Table data is incorrect error");
+    }
   }
 
   public parseKeys(rows: any[]): string[] {
