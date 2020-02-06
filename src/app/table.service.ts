@@ -15,6 +15,7 @@ export class TableService {
   private readonly INCORRECT_TABLE_DATA_ERROR: string = 'Table data is incorrect';
 
   private _rows: any[];
+  private _keys: string[];
 
   constructor(private toastService: ToastService,
               private utilService: UtilService) { }
@@ -25,6 +26,10 @@ export class TableService {
 
   set rows(value: any[]) {
     this._rows = value;
+  }
+
+  get keys(): string[] {
+    return this._keys;
   }
 
   public async importFile(file: File): Promise<string> {
@@ -50,10 +55,14 @@ export class TableService {
 
     try {
       this._rows = this.utilService.parseJSONArray(str);
+      this._keys = this.utilService.parseKeys(this._rows);
+      this.utilService.fillMissingFields(this._rows, this._keys);
       return true;
     } catch (error) {
       try {
         this._rows = this.utilService.parseCSV(str);
+        this._keys = this.utilService.parseKeys(this._rows);
+        this.utilService.fillMissingFields(this._rows, this._keys);
         return true;
       } catch (error) {
         return false;

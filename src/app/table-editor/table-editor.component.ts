@@ -12,7 +12,6 @@ import { CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 export class TableEditorComponent implements OnInit {
   private _rows: any[];
-  private _keys: string[];
   private _mode: string;
 
   constructor(private router: Router,
@@ -24,7 +23,6 @@ export class TableEditorComponent implements OnInit {
         this.backToInput();
     } else {
       this._rows =  this.utilService.copyArray(this.tableService.rows);
-      this._keys = this.utilService.parseKeys(this._rows);
       this._mode = 'r/o';
     }
   }
@@ -38,7 +36,7 @@ export class TableEditorComponent implements OnInit {
   }
 
   get keys(): string[] {
-    return this._keys;
+    return this.tableService.keys;
   }
 
   get mode(): string {
