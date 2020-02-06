@@ -5,6 +5,7 @@
     <textarea [(ngModel)]="rawTableData" class="form-control" id="table-data-input" rows="12"></textarea>
     <div class="row mt-5">
         <button type="button" class="btn btn-outline-dark mx-auto" (click)="importFromInput()">Import table</button>
+        <button *ngIf="tablePresence;" type="button" class="btn btn-outline-dark mx-auto" (click)="toTable()">Back to table</button>
     </div>
     <div class="row my-5">
         <div class="custom-file">

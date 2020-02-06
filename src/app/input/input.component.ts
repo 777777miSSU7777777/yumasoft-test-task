@@ -16,8 +16,6 @@ export class InputComponent implements OnInit {
               private tableService: TableService) { }
 
   ngOnInit() {
-    this._rawTableData = "";
-    this._file = null;
   }
 
   get rawTableData(): string {
@@ -52,5 +50,9 @@ export class InputComponent implements OnInit {
 
   get fileName(): string {
     return this._file && this._file.name || 'Choose file';
+  }
+
+  get tablePresence(): boolean {
+    return this.tableService.rows !== undefined;
   }
 }
