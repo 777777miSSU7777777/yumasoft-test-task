@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TableService } from '../table.service';
+import { TableService } from '../../services/table.service';
 import { Router } from '@angular/router';
 import { Papa } from 'ngx-papaparse';
 

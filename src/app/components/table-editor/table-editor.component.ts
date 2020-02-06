@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TableService } from '../table.service';
+import { TableService } from '../../services/table.service';
 import { Router } from '@angular/router';
-import { UtilService } from '../util.service';
+import { UtilService } from '../../services/util.service';
 import { CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({

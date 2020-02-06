@@ -1,8 +1,8 @@
 import { NgModule, Output } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { InputComponent } from './input/input.component';
-import { TableEditorComponent } from './table-editor/table-editor.component';
-import { OutputComponent } from './output/output.component';
+import { InputComponent } from './components/input/input.component';
+import { TableEditorComponent } from './components/table-editor/table-editor.component';
+import { OutputComponent } from './components/output/output.component';
 
 const routes: Routes = [
   { path: 'input', component: InputComponent },
