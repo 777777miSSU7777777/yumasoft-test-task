@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ToastService } from './toast.service';
 import { UtilService } from './util.service';
+import { isNumber } from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class TableService {
   private readonly EMPTY_DATA_TABLE_ERROR: string = 'You should import table data first!';
   private readonly NO_FILE_ERROR: string = 'There is no file';
   private readonly INVALID_FILE_EXTENSION_ERROR: string = 'Invalid file extension';
+  private readonly INCORRECT_TABLE_DATA_ERROR: string = 'Table data is incorrect';
 
   private _rows: any[];
 
@@ -40,6 +42,9 @@ export class TableService {
   public importTable(str: string): boolean {
     if (str.length === 0) {
       this.toastService.showError(this.EMPTY_ERROR, 5);
+      return false;
+    } else if (str.match(/^.+/)) {
+      this.toastService.showError(this.INCORRECT_TABLE_DATA_ERROR, 5);
       return false;
     }
 
