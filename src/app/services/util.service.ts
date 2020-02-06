@@ -64,14 +64,14 @@ export class UtilService {
   public parseCSV(str: string): any[] {
     const result: ParseResult = this.csvParser.parse(str, { header: true });
     
-    if (result.data.length === 0) {
-      this.toastService.showError(this.CSV_EMPTY_ARRAY_ERROR, 5);
-      throw new Error("CSV array is empty error");
-    } else if (isEmpty(result.errors)) {
-      return (result.data as any[]);
-    } else {
+    if (!isEmpty(result.errors)) {
       this.toastService.showError(this.INCORRECT_TABLE_DATA_ERROR, 5);
       throw new Error("Table data is incorrect error");
+    } else if (result.data.length === 0) {
+      this.toastService.showError(this.CSV_EMPTY_ARRAY_ERROR, 5);
+      throw new Error("CSV array is empty error");
+    } else {
+      return (result.data as any[]);
     }
   }
 
