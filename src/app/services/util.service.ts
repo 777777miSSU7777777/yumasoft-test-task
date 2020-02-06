@@ -93,13 +93,10 @@ export class UtilService {
     return keys;
   }
 
-  public fillMissingFields(rows: any[], keys: string[]): void {
+  public stringifyRowsFields(rows: any[], keys: string[]): void {
     for (let i = 0; i < rows.length; i++) {
       for (let key of keys) {
-        if (rows[i][key] === undefined) {
-          console.log(key);
-          rows[i][key] = '';
-        }
+        rows[i][key] = rows[i][key] === undefined ? '' : rows[i][key].toString();
       }
     }
   }

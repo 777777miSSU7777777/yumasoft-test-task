@@ -56,13 +56,13 @@ export class TableService {
     try {
       this._rows = this.utilService.parseJSONArray(str);
       this._keys = this.utilService.parseKeys(this._rows);
-      this.utilService.fillMissingFields(this._rows, this._keys);
+      this.utilService.stringifyRowsFields(this._rows, this._keys);
       return true;
     } catch (error) {
       try {
         this._rows = this.utilService.parseCSV(str);
         this._keys = this.utilService.parseKeys(this._rows);
-        this.utilService.fillMissingFields(this._rows, this._keys);
+        this.utilService.stringifyRowsFields(this._rows, this._keys);
         return true;
       } catch (error) {
         return false;
