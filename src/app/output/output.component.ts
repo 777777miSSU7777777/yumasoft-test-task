@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TableService } from '../table.service';
 import { Router } from '@angular/router';
-import { ToastService } from '../toast.service';
 import { Papa } from 'ngx-papaparse';
 
 @Component({
@@ -14,22 +13,17 @@ export class OutputComponent implements OnInit {
   private _rawTableData: string;
   private _format: string;
 
-  private readonly EMPTY_DATA_TABLE_ERROR: string = 'You should import table data first!';
-
   constructor(private router: Router,
               private tableService: TableService, 
-              private toastService: ToastService,
               private parser: Papa) { }
 
   ngOnInit() {
-    if (!this.tableService.rows) {
-      this.toastService.showError(this.EMPTY_DATA_TABLE_ERROR, 5);
+    if (!this.tableService.checkTablePresence()) {
       this.backToInput();
-      return;
+    } else {
+      this._format = 'json';
+      this._rawTableData = JSON.stringify(this.tableService.rows)
     }
-
-    this._format = 'json';
-    this._rawTableData = JSON.stringify(this.tableService.rows)
   }
 
   get rawTableData(): string {
