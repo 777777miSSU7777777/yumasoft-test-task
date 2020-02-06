@@ -54,20 +54,24 @@ export class TableService {
     }
 
     try {
-      this._rows = this.utilService.parseJSONArray(str);
-      this._keys = this.utilService.parseKeys(this._rows);
-      this.utilService.stringifyRowsFields(this._rows, this._keys);
+      this.tryParse(this.utilService.parseJSONArray, str);
       return true;
     } catch (error) {
       try {
-        this._rows = this.utilService.parseCSV(str);
-        this._keys = this.utilService.parseKeys(this._rows);
-        this.utilService.stringifyRowsFields(this._rows, this._keys);
+        this.tryParse(this.utilService.parseCSV, str);
         return true;
       } catch (error) {
         return false;
       }
     }
+  }
+
+  private tryParse(parseCallback: Function, str: string): void {
+    const tableRows = parseCallback(str);
+    const tableKeys = this.utilService.parseKeys(tableRows);
+    this.utilService.stringifyRowsFields(tableRows, tableKeys);
+    this._rows = tableRows;
+    this._keys = tableKeys;
   }
 
   public checkTablePresence(): boolean {

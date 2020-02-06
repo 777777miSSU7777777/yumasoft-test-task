@@ -13,6 +13,7 @@ export class UtilService {
   private readonly JSON_EMPTY_ARRAY_ERROR: string = 'JSON table data is empty';
   private readonly CSV_EMPTY_ARRAY_ERROR: string = 'CSV table data is empty';
   private readonly INCORRECT_TABLE_DATA_ERROR: string = 'Table data is incorrect';
+  private readonly NO_KEYS_ERROR: string = 'There are no keys'
 
   constructor(private toastService: ToastService,
               private csvParser: Papa) { }
@@ -82,6 +83,11 @@ export class UtilService {
       for (let key of Object.keys(row)) {
         keySet.add(key);
       }
+    }
+
+    if (keySet.size === 0) {
+      this.toastService.showError(this.NO_KEYS_ERROR, 5);
+      throw new Error("The are no keys error");
     }
 
     const keys: string[] = [];
